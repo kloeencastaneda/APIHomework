@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,9 +14,9 @@ namespace APIHomework.Controllers
         {
             IList<Staffs> staffs = null;
 
-            using (var ctx = new StaffsModel())
+            using (var ctx = new WebAPIEntities2())
             {
-                people = ctx.Staffs.ToList();
+                staffs = ctx.Staffs.ToList();
             }
             if (staffs.Count == 0)
                 {
@@ -25,13 +26,13 @@ namespace APIHomework.Controllers
                 return Ok(staffs);
 
             }
-        public IHttpActionResult GetStaffById(int Id)
+        public IHttpActionResult GetStaffById(int staff_id)
         {
             Staffs staffs = null;
 
-            using (var ctx = new StaffsModel())
+            using (var ctx = new WebAPIEntities2())
             {
-                staffs = ctx.People.Where(s => s.id == Id).FirstOrDefault<Staffs>();
+                staffs = ctx.Staffs.Where(s => s.staff_id == staff_id).FirstOrDefault<staff>();
 
 
                 if (staffs == null)
@@ -47,16 +48,19 @@ namespace APIHomework.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid model");
 
-            using (var ctx = new StaffsModel())
+            using (var ctx = new WebAPIEntities2())
             {
-                var existingStaffs = ctx.Staffs.Where(s => s.id == staffs.id)
+                var existingStaffs = ctx.Staffs.Where(s => s.staff_id == staffs.staff_id)
                                                         .FirstOrDefault<Staffs>();
 
                 if (existingStaffs != null)
                 {
-                    existingStaffs.Name = persons.Name;
-                    existingStaffs.age = persons.age;
-
+                    existingStaffs.first_name = staffs.first_name;
+                    existingStaffs.last_name = staffs.last_name;
+                    existingStaffs.email = staffs.email;
+                    existingStaffs.phone = staffs.phone;
+                    existingStaffs.active = staffs.active; 
+                    existingStaffs.store_id = staffs.store_id;
                     ctx.SaveChanges();
                 }
                 else
@@ -67,15 +71,15 @@ namespace APIHomework.Controllers
 
             return Ok();
         }
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult Delete(int staff_id)
         {
-            if (id <= 0)
-                return BadRequest("Not a valid staffs id");
+            if (staff_id <= 0)
+                return BadRequest("Not a valid staff id.");
 
-            using (var ctx = new StaffsModel())
+            using (var ctx = new WebAPIEntities2())
             {
                 var staffs = ctx.Staffs
-                    .Where(s => s.id == id)
+                    .Where(s => s.staff_id == staff_id)
                     .FirstOrDefault();
 
                 ctx.Entry(staffs).State = System.Data.Entity.EntityState.Deleted;
@@ -90,13 +94,18 @@ namespace APIHomework.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data.");
 
-            using (var ctx = new StaffsModel())
+            using (var ctx = new WebAPIEntities2())
             {
-                ctx.People.Add(new Person()
+             ctx.Staffs.Add(new Staffs()
                 {
-                    Name = staffs.Name,
-                        age = staffs.age
-            });
+
+                    first_name = staffs.first_name,
+                    last_name = staffs.last_name,
+                    email = staffs.email,
+                    phone = staffs.phone,
+                    active = staffs.active,
+                    store_id = staffs.store_id,
+                });
 
                 ctx.SaveChanges();
             }
