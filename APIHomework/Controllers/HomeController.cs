@@ -13,9 +13,9 @@ namespace APIHomework.Controllers
         {
             ViewBag.Title = "Home Page";
 
-            // GET: Student
+            // GET: Staffs
          
-                IEnumerable<Person> person = null;
+                IEnumerable<Staffs> staffs = null;
 
                 using (var client = new HttpClient())
                 {
@@ -27,21 +27,21 @@ namespace APIHomework.Controllers
                     var result = responseTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<IList<Person>>();
+                        var readTask = result.Content.ReadAsAsync<IList<Staffs>>();
                         readTask.Wait();
 
-                        person = readTask.Result;
+                        staffs = readTask.Result;
                     }
                     else //web api sent error response 
                     {
                     //log response status here..
 
-                    person = Enumerable.Empty<Person>();
+                    staffs = Enumerable.Empty<Staffs>();
 
                         ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
                     }
                 }
-                return View(person);
+                return View(staffs);
             
         }
      
@@ -51,14 +51,14 @@ namespace APIHomework.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult create(Person person)
+        public ActionResult create(Staffs staffs)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost:1126/api/student");
 
                 //HTTP POST
-                var postTask = client.PostAsJsonAsync<Person>("person", person);
+                var postTask = client.PostAsJsonAsync<Staffs>("staffs", staffs);
                 postTask.Wait();
 
                 var result = postTask.Result;
@@ -70,7 +70,7 @@ namespace APIHomework.Controllers
 
             ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
 
-            return View(person);
+            return View(staffs);
         }
     }
 }

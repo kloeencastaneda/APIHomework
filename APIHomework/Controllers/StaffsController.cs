@@ -16,7 +16,7 @@ namespace APIHomework.Controllers
 
             using (var ctx = new WebAPIEntities2())
             {
-                staffs = ctx.Staffs.ToList();
+                staffs = ctx.Staffs1.ToList();
             }
             if (staffs.Count == 0)
                 {
@@ -32,7 +32,7 @@ namespace APIHomework.Controllers
 
             using (var ctx = new WebAPIEntities2())
             {
-                staffs = ctx.Staffs.Where(s => s.staff_id == staff_id).FirstOrDefault<staff>();
+                staffs = ctx.Staffs1.Where(s => s.staff_id == staff_id).FirstOrDefault<Staffs>();
 
 
                 if (staffs == null)
@@ -50,7 +50,7 @@ namespace APIHomework.Controllers
 
             using (var ctx = new WebAPIEntities2())
             {
-                var existingStaffs = ctx.Staffs.Where(s => s.staff_id == staffs.staff_id)
+                var existingStaffs = ctx.Staffs1.Where(s => s.staff_id == staffs.staff_id)
                                                         .FirstOrDefault<Staffs>();
 
                 if (existingStaffs != null)
@@ -78,7 +78,7 @@ namespace APIHomework.Controllers
 
             using (var ctx = new WebAPIEntities2())
             {
-                var staffs = ctx.Staffs
+                var staffs = ctx.Staffs1
                     .Where(s => s.staff_id == staff_id)
                     .FirstOrDefault();
 
@@ -96,7 +96,7 @@ namespace APIHomework.Controllers
 
             using (var ctx = new WebAPIEntities2())
             {
-             ctx.Staffs.Add(new Staffs()
+             ctx.Staffs1.Add(new Staffs()
                 {
 
                     first_name = staffs.first_name,
